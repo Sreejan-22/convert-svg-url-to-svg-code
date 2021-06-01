@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
+    <title>SVG Color Change</title>
+  </head>
+  <body>
+    <div id="app">
+      <h1 class="heading">SVG Color Change</h1>
+      <img
+        src="https://cdn.shopify.com/s/files/1/0496/1029/files/Freesample.svg"
+        alt=""
+        class="svg-img"
+        id="svg-id"
+      />
+      <div class="svg-container"></div>
+    </div>
+    <script>
+      /*
+      Using an img tag with a src in essentially makes an HTTP request to the server for you. In this case you have to make the request yourself. You can do that with the Fetch       API which is native to JavaScript.
+      */
+
+      const svgurl =
+        "https://cdn.shopify.com/s/files/1/0496/1029/files/Freesample.svg";
+
+      // Select the current image
+      const image = document.querySelector("#svg-id");
+
+      // Create a new dom parser to turn the SVG string into an element
+      const parser = new DOMParser();
+
+      // Fetch the file from the server
+      fetch(svgurl)
+        .then((response) => {
+          console.log(response);
+          return response.text();
+        })
+        .then((text) => {
+          console.log(text);
+          // Turn the raw text into a document with the svg element in it
+          const parsed = parser.parseFromString(text, "text/html");
+          // Select the <svg> element from that document
+          const svg = parsed.querySelector("svg");
+          // If both the image and svg are found, replace the image with the svg
+          if (image !== null && svg !== null) {
+            // replaceWith() method
+            // Replaces node with nodes,
+            // while replacing strings in nodes with equivalent Text nodes.
+            image.replaceWith(svg);
+          }
+        })
+        .catch((err) => console.log(err));
+    </script>
+  </body>
+</html>
